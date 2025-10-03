@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<title>Tienda Pokémon</title>
+</head>
+<body>
+	<header class="header">
+		<div class="logo">POKESTORE</div>
+		<nav class="nav">
+			<ul>
+				<li><a href="menu.html">Inicio</a></li>
+				<li><a href="../controllers/ver_favoritos.php">Favoritos</a></li>
+				<li><a href="../controllers/ver_carrito.php">Carrito</a></li>
+				<li><a href="../controllers/ver_compras.php">Compras</a></li>
+				<li><a href="agregar_saldo.html">Saldo</a></li>
+				<li><a href="administrar_usuario.html">Administrar</a></li>
+				<li><a href="../controllers/cerrarSesion.php">Cerrar Sesión</a></li>
+			</ul>
+		</nav>
+	</header>
+	<h1>Adopta tu Pokémon</h1>
+	<!-- 🔍 Buscador -->
+	<form id="form-buscar">
+		<h2>Buscar Pokémon</h2>
+		<input type="text" id="nombre" placeholder="Ej: pikachu">
+		<button type="submit">Buscar</button>
+	</form>
+	<div id="pokemon"></div>
+	<!-- 🌟 Pokémon Famosos -->
+	<h2>Pokémon más populares</h2>
+	<div id="populares"></div>
+	<script>
+		// ========== BUSCADOR ========== 
+		const form = document.getElementById("form-buscar");
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			const nombre = document.getElementById("nombre").value.toLowerCase();
+			const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+			if (res.ok) {
+				const data = await res.json();
+				mostrarPokemon(data, "pokemon");
+			} else {
+				alert("Pokémon no encontrado 😢");
+			}
+		});
+		// ========== MOSTRAR POKÉMON ========== 
+		function mostrarPokemon(data, contenedorId) {
+			const div = document.getElementById(contenedorId);
+			div.innerHTML = `
+				<div class="card">
+					<h3>${data.name}</h3>
+					<img src="${data.sprites.front_default}" alt="${data.name}">
+					<p>Altura: ${data.height} | Peso: ${data.weight}</p>
+					<p>Tipo: ${data.types.map(t => t.type.name).join(", ")}</p> 
+					<!-- Botón: Favorito -->
+					<form method="POST" action="../controllers/agregar_favorito.php">
+						<input type="hidden" name="id_pokemon" value="${data.id}">
+						<input type="hidden" name="nombre_pokemon" value="${data.name}">
+						<input type="hidden" name="sprite_url" value="${data.sprites.front_default}">
+						<button type="submit">⭐ Favorito</button>
+					</form>
+					<!-- Botón: Agregar Carrito -->
+					<form method="POST" action="../controllers/agregar_carrito.php">
+						<input type="hidden" name="id_pokemon" value="${data.id}">
+						<input type="hidden" name="nombre_pokemon" value="${data.name}">
+						<input type="hidden" name="sprite_url" value="${data.sprites.front_default}">
+						<label>Cantidad:</label>
+						<input type="number" name="cantidad" value="1" min="1"><br>
+						<button type="submit">🛒 Agregar al Carrito</button>
+					</form>
+					<!-- Botón: Comprar -->
+					<form method="POST" action="../controllers/comprar.php">
+						<input type="hidden" name="id_pokemon" value="${data.id}">
+						<input type="hidden" name="nombre" value="${data.name}">
+						<input type="hidden" name="altura" value="${data.height}">
+						<input type="hidden" name="peso" value="${data.weight}">
+						<input type="hidden" name="precio" value="500"> <!-- ejemplo fijo -->
+						<input type="hidden" name="tipo_principal" value="${data.types[0]?.type.name}">
+						<input type="hidden" name="tipo_secundario" value="${data.types[1]?.type.name || ''}">
+						<input type="hidden" name="imagen" value="${data.sprites.front_default}">
+						<button type="submit">Comprar</button>
+					</form>
+				</div>
+			`;
+		}
+		// ========== POKÉMON FAMOSOS ========== 
+		const famosos = [
+			"Bulbasaur","Ivysaur","Venusaur","Charmander","Charmeleon","Charizard","Squirtle","Wartortle","Blastoise","Caterpie","Metapod","Butterfree","Weedle","Kakuna","Beedrill","Pidgey","Pidgeotto","Pidgeot","Rattata","Raticate","Spearow","Fearow","Ekans","Arbok","Pikachu","Sandshrew","Sandslash","Nidoran♀","Nidorina","Nidoqueen"
+		];
+		async function cargarFamosos() {
+			const contenedor = document.getElementById("populares");
+			for (let nombre of famosos) {
+				const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+				if (res.ok) {
+					const data = await res.json();
+					const card = document.createElement("div");
+					card.className = "card";
+					card.innerHTML = `
+						<h3>${data.name}</h3>
+						<img src="${data.sprites.front_default}" alt="${data.name}">
+						<p>Altura: ${data.height} | Peso: ${data.weight}</p>
+						<p>Tipo: ${data.types.map(t => t.type.name).join(", ")}</p>
+						<!-- Botón: Favorito -->
+						<form method="POST" action="../controllers/agregar_favorito.php">
+							<input type="hidden" name="id_pokemon" value="${data.id}">
+							<input type="hidden" name="nombre_pokemon" value="${data.name}">
+							<input type="hidden" name="sprite_url" value="${data.sprites.front_default}">
+							<button type="submit">⭐ Favorito</button>
+						</form>
+						<!-- Botón: Agregar Carrito -->
+						<form method="POST" action="../controllers/agregar_carrito.php">
+							<input type="hidden" name="id_pokemon" value="${data.id}">
+							<input type="hidden" name="nombre_pokemon" value="${data.name}">
+							<input type="hidden" name="sprite_url" value="${data.sprites.front_default}">
+							<label>Cantidad:</label>
+							<input type="number" name="cantidad" value="1" min="1"><br>
+							<button type="submit">🛒 Agregar al Carrito</button>
+						</form>
+						<!-- Botón: Comprar -->
+						<form method="POST" action="../controllers/comprar.php">
+							<input type="hidden" name="id_pokemon" value="${data.id}">
+							<input type="hidden" name="nombre_pokemon" value="${data.name}">
+							<input type="hidden" name="sprite_url" value="${data.sprites.front_default}">
+							<button type="submit">💰 Comprar</button>
+						</form>
+					`;
+					contenedor.appendChild(card);
+				}
+			}
+		}
+		cargarFamosos();
+	</script>
+</body>
+</html>

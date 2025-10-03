@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de usuario</title>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">POKESTORE</div>
+        <nav class="nav">
+            <ul>
+                <li><a href="menu.html">Inicio</a></li>
+                <li><a href="../controllers/ver_favoritos.php">Favoritos</a></li>
+                <li><a href="../controllers/ver_carrito.php">Carrito</a></li>
+                <li><a href="../controllers/ver_compras.php">Compras</a></li>
+                <li><a href="agregar_saldo.html">Saldo</a></li>
+                <li><a href="administrar_usuario.html">Administrar</a></li>
+                <li><a href="../controllers/cerrarSesion.php">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <form method="POST" action="../controllers/actualizar.php" class="formulario">
+     <h1>Actualizar Datos</h1>
+    <label>Nuevo Nombre de usuario:</label><br>
+    <input type="text" name="nombre" required><br><br>
+
+    <label>Nueva Contraseña:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <label>Nuevo Teléfono:</label><br>
+    <input type="tel" name="telefono" required><br><br>
+
+    <button type="submit">Actualizar</button>
+    <p>Eliminar cuenta: <button class="button-2"><a href="../controllers/eliminar.php">Eliminar</a></button></p>
+
+  </form>
+
+   
+</body>
+</html>

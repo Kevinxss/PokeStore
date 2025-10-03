@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Registro</title>
+</head>
+<body>
+ 
+  <form method="POST" action="../controllers/registro.php" class="formulario">
+     <h1>Crear cuenta</h1>
+    <label>Nombre de usuario:</label><br>
+    <input type="text" name="nombre" required><br><br>
+
+    <label>Contraseña:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <label>Teléfono:</label><br>
+    <input type="tel" name="telefono" required><br><br>
+
+    <button type="submit">Registrarse</button>
+    <p>¿Ya tienes cuenta?  <button class="button-2"><a href="index.html">Inicia sesión</a></button></p>
+  </form>
+</body>
+</html>

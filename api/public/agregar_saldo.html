@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar saldo</title>
+</head>
+<body>
+  <header class="header">
+        <div class="logo">POKESTORE</div>
+        <nav class="nav">
+            <ul>
+                <li><a href="menu.html">Inicio</a></li>
+                <li><a href="../controllers/ver_favoritos.php">Favoritos</a></li>
+                <li><a href="../controllers/ver_carrito.php">Carrito</a></li>
+                <li><a href="../controllers/ver_compras.php">Compras</a></li>
+                <li><a href="agregar_saldo.html">Agregar saldo</a></li>
+                <li><a href="administrar_usuario.html">Administrar</a></li>
+                <li><a href="../controllers/cerrarSesion.php">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+  </header>
+
+  <section class="form-section">
+    <form method="POST" action="../controllers/agregar_saldo.php" class="formulario">
+      <h1>Agregar saldo</h1>
+      <label for="dinero">Monto a ingresar:</label><br>
+      <input type="number" name="dinero" id="dinero" step="0.01" min="1" required><br><br>
+      <button type="submit">Agregar saldo</button>
+    </form>
+  </section>
+</body>
+</html>

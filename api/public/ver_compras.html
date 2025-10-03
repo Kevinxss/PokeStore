@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/pokemon/api/public/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tus Compras</title>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">POKESTORE</div>
+        <nav class="nav">
+            <ul>
+                <li><a href="../public/menu.html">Inicio</a></li>
+                <li><a href="../controllers/ver_favoritos.php">Favoritos</a></li>
+                <li><a href="../controllers/ver_carrito.php">Carrito</a></li>
+                <li><a href="../controllers/ver_compras.php">Compras</a></li>
+                <li><a href="../public/agregar_saldo.html">Saldo</a></li>
+                <li><a href="../public/administrar_usuario.html">Administrar</a></li>
+                <li><a href="../controllers/cerrarSesion.php">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section>
+        <h2 class="bienvenida">Historial de Compras de <?= htmlspecialchars($usuario['nombre']); ?></h2>
+        
+        <?php if (count($pokemones_comprados) > 0): ?>
+            <div class="contenedor">
+                <?php foreach ($pokemones_comprados as $poke): ?>
+                    <div class="card">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<?= htmlspecialchars($poke['id']); ?>.png" 
+                             alt="<?= htmlspecialchars($poke['nombre']); ?>">
+                        <div class="card">
+                            <strong><?= htmlspecialchars($poke['nombre']); ?></strong>
+                            <?php if ($poke['tipo']): ?> - Tipo: <?= htmlspecialchars($poke['tipo']); ?><?php endif; ?>
+                            <?php if ($poke['peso'] !== null): ?>
+                                - Peso: <?= htmlspecialchars($poke['peso']); ?> kg
+                                - Altura: <?= htmlspecialchars($poke['altura']); ?> m
+                            <?php endif; ?>
+                            <br>
+                            Cantidad: <?= htmlspecialchars($poke['cantidad']); ?>  
+                            - Subtotal: $<?= htmlspecialchars($poke['subtotal']); ?>
+                            <br>
+                            <small>Compra #<?= $poke['id_compra']; ?> - <?= $poke['fecha']; ?></small>
+                            <form action="../controllers/eliminar_pokemon.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="id_pokemon" value="<?= $poke['id']; ?>">
+                                <input type="hidden" name="id_compra" value="<?= $poke['id_compra']; ?>">
+                                <input type="hidden" name="origen" value="compras">
+                                <br>
+                                <button type="submit" class="btn-eliminar">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>No has comprado ningún Pokémon aún.</p>
+        <?php endif; ?>
+    </section>
+</body>
+</html>

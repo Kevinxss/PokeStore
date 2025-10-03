@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/pokemon/api/public/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de usuario</title>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">POKESTORE</div>
+        <nav class="nav">
+            <ul>
+                <li><a href="../public/menu.html">Inicio</a></li>
+                <li><a href="../controllers/ver_favoritos.php">Favoritos</a></li>
+                <li><a href="../controllers/ver_carrito.php">Carrito</a></li>
+                <li><a href="../controllers/ver_compras.php">Compras</a></li>
+                <li><a href="../public/agregar_saldo.html">Saldo</a></li>
+                <li><a href="../public/administrar_usuario.html">Administrar</a></li>
+                <li><a href="../controllers/cerrarSesion.php">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section>
+        <h2 class="bienvenida">Bienvenido, <?= htmlspecialchars($usuario['nombre']); ?></h2>
+        <p>Teléfono: <?= htmlspecialchars($usuario['telefono']); ?></p>
+        <h3>Pokemones En el carrito</h3>
+        <?php if (count($pokemones_carrito) > 0): ?>
+            <form method="POST" action="../controllers/comprar_carrito.php">
+                <div class="contenedor">
+                    <?php foreach ($pokemones_carrito as $poke): ?>
+                        <div class="card">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<?= htmlspecialchars($poke['id']); ?>.png" alt="<?= htmlspecialchars($poke['nombre']); ?>">
+                            <div class="info">
+                                <strong><?= htmlspecialchars($poke['nombre']); ?></strong>
+                                <?php if ($poke['tipo']): ?> - Tipo: <?= htmlspecialchars($poke['tipo']); ?><?php endif; ?>
+                                <?php if ($poke['peso'] !== null): ?>
+                                    - Peso: <?= htmlspecialchars($poke['peso']); ?> kg
+                                    - Altura: <?= htmlspecialchars($poke['altura']); ?> m
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <button type="submit">Comprar</button>
+            </form>
+        <?php else: ?>
+            <p>No tienes pokemones en tu carrito.</p>
+        <?php endif; ?>
+    </section>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8">
+  <title>Adoptar Pokémon</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    img { width: 150px; }
+  </style>
+</head>
+<body>
+  <form id="form-buscar" class="formulario">
+    <h1>Buscar Pokémon</h1>
+    <input type="text" id="nombre" placeholder="Ej: pikachu">
+    <button type="submit">Buscar</button>
+  </form>
+
+  <div id="pokemon"></div>
+
+  <script>
+    const form = document.getElementById("form-buscar");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value.toLowerCase();
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+      if (res.ok) {
+        const data = await res.json();
+        const div = document.getElementById("pokemon");
+        div.innerHTML = `
+          <h2>${data.name.toUpperCase()}</h2>
+          <img src="${data.sprites.front_default}" alt="${data.name}">
+          <p>Altura: ${data.height} | Peso: ${data.weight}</p>
+          <p>Tipo: ${data.types.map(t => t.type.name).join(", ")}</p>
+          <form method="POST" action="../controllers/adoptar.php">
+            <input type="hidden" name="id_pokemon" value="${data.id}">
+            <input type="hidden" name="nombre_pokemon" value="${data.name}">
+            <input type="hidden" name="peso" value="${data.weight}">
+            <input type="hidden" name="altura" value="${data.height}">
+            <input type="hidden" name="tipo" value="${data.types.map(t => t.type.name).join(", ")}">
+            <input type="hidden" name="sprite_url" value="${data.sprites.front_default}">
+            <label>Nombre personalizado:</label><br>
+            <input type="text" name="nombre_personalizado" required><br><br>
+            <input type="hidden" name="fecha_creacion" value="<?php echo date('Y-m-d'); ?>">
+            <button type="submit">Adoptar</button>
+          </form>
+        `;
+      } else {
+        alert("Pokémon no encontrado 😢");
+      }
+    });
+  </script>
+</body>
+</html>
